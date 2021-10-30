@@ -1,17 +1,19 @@
-package ru.grNiko.sweetApp;
+package ru.grNiko.sweetApp.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import ru.grNiko.sweetApp.domain.Message;
+import ru.grNiko.sweetApp.domain.User;
+import ru.grNiko.sweetApp.repository.MessageRepo;
 import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.grNiko.sweetApp.domain.Message;
-import ru.grNiko.sweetApp.repository.MessageRepo;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.Map;
 
 @Controller
-public class GreetingController {
+public class MainController {
     @Autowired
     private MessageRepo messageRepo;
 
@@ -23,16 +25,24 @@ public class GreetingController {
     @GetMapping("/main")
     public String main(Map<String, Object> model) {
         Iterable<Message> messages = messageRepo.findAll();
+
         model.put("messages", messages);
+
         return "main";
     }
 
     @PostMapping("/main")
-    public String add(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
-        Message message = new Message(text, tag);
+    public String add(
+            @AuthenticationPrincipal User user,
+            @RequestParam String text,
+            @RequestParam String tag, Map<String, Object> model
+    ) {
+        Message message = new Message(text, tag, user);
 
         messageRepo.save(message);
+
         Iterable<Message> messages = messageRepo.findAll();
+
         model.put("messages", messages);
 
         return "main";
@@ -52,5 +62,4 @@ public class GreetingController {
 
         return "main";
     }
-
 }
