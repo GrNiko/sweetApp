@@ -8,6 +8,12 @@
         </div>
     </#if>
 
+    <#if message?? >
+        <div class="alert alert-${messageType}" role="alert">
+            ${message}
+        </div>
+    </#if>
+
     <@login.login "/login" false/>
 
 </@common.page>
