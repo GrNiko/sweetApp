@@ -1,6 +1,5 @@
 <#import "parts/common.ftl" as common>
 
-
 <@common.page>
     <div class="form-row">
         <div class="form-group col-md-6">
@@ -11,65 +10,10 @@
             </form>
         </div>
     </div>
-    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-       aria-controls="collapseExample">
-        Add new Message
-    </a>
-    <div class="collapse <#if message??>show</#if>" id="collapseExample">
-        <div class="form-group mt-3">
-            <form method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <input type="text" class="form-control ${(textError??)?string('is-invalid','')}"
-                           value="<#if message??>${message.text}</#if>" name="text" placeholder="Текст сообщения"/>
-                    <#if textError??>
-                    <div class="invalid-feedback">
-                        ${textError}
-                    </div>
-                    </#if>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control"
-                           value="<#if message??>${message.tag}</#if>" name="tag" placeholder="Проставить тэги">
-                    <#if textError??>
-                        <div class="invalid-feedback">
-                            ${tagError}
-                        </div>
-                    </#if>
-                </div>
-                <div class="form-group">
-                    <div class="custom-file">
-                        <input type="file" name="file" id="customFile">
-                        <label class="custom-file-label" for="customFile">Выберите файл</label>
-                    </div>
-                </div>
-                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Отправить</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <div class="card-columns">
-        <#list messages as message>
-            <div class="card my-3">
-                <div>
-                    <#if message.filename??>
-                        <img src="/img/${message.filename}" class="card-img-top">
-                    </#if>
-                </div>
-                <div class="m-2">
-                    <span>${message.text}</span>
-                    <i>${message.tag}</i>
-                </div>
+    <#include "parts/messageEdit.ftl" />
 
-                <div class="card-footer text_muted">
-                    ${message.authorName}
-                </div>
+    <#include "parts/messageList.ftl" />
 
-            </div>
-        <#else>
-            Список сообщений пуст
-        </#list>
-    </div>
+
 </@common.page>
